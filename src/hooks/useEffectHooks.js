@@ -57,3 +57,35 @@ export const useNetwork = (onChange) => {
   }, []);
   return status;
 };
+
+export const useScroll = () => {
+  const [state, setState] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const handleScroll = () => {
+      setState({ x: window.scrollX, y: window.scrollY });
+      return () => window.removeEventListener("scroll", handleScroll);
+    };
+    window.addEventListener("scroll", handleScroll);
+  });
+  return state;
+};
+
+export const useNotification = (title, options) => {
+  if (!("Notification" in window)) {
+    return;
+  }
+  const fireNoti = () => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          new Notification(title, options);
+        } else {
+          return;
+        }
+      });
+    } else {
+      new Notification(title, options);
+    }
+  };
+  return fireNoti;
+};

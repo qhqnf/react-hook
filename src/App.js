@@ -5,9 +5,10 @@ import {
   useClick,
   useFadeIn,
   useNetwork,
+  useScroll,
+  useNotification,
 } from "./hooks/useEffectHooks";
 import { useConfirm, usePreventLeave, useBeforeLeave } from "./hooks/Message";
-
 import "./App.css";
 
 const apiContent = [
@@ -50,8 +51,10 @@ const App = () => {
     console.log("Network changed");
   };
   const online = useNetwork(handleNetworkChange);
+  const { y } = useScroll();
+  const triggerNoti = useNotification("Can I Noti");
   return (
-    <div className="App">
+    <div className="App" style={{ height: "1000vh" }}>
       <div className="container use_state">
         <h1>Hello! Number:{item}</h1>
         <button onClick={incrementItem}>+1</button>
@@ -85,6 +88,14 @@ const App = () => {
       </div>
       <div className="container useNetwork">
         <h2>{online ? "Online" : "Offline"}</h2>
+      </div>
+      <div className="container useScroll">
+        <h1 style={{ position: "fixed", color: y > 100 ? "red" : "blue" }}>
+          Color change
+        </h1>
+      </div>
+      <div className="container useNotification">
+        <button onClick={triggerNoti}>Noti</button>
       </div>
     </div>
   );
